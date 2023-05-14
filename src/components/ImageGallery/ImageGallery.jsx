@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import css from './ImageGallery.module.css';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { imagesApi } from 'services/images';
 import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
@@ -101,3 +102,7 @@ export class ImageGallery extends Component {
     );
   }
 }
+
+ImageGallery.propTypes = {
+  titleImg: PropTypes.string.isRequired,
+};
