@@ -11,7 +11,7 @@ import { Modal } from '../Modal/Modal';
 export class ImageGallery extends Component {
   state = {
     images: [],
-    status: 'idle',
+    loading: false,
     openModal: false,
     largeImg: '',
     totalHits: 0,
@@ -19,7 +19,8 @@ export class ImageGallery extends Component {
     perPage: 12,
   };
 
-  handleLargeImg = img => {
+  handleLargeImg = event => {
+    const img = event.currentTarget.id;
     this.setState(prevState => ({
       openModal: !prevState.openModal,
       largeImg: img,
@@ -28,7 +29,7 @@ export class ImageGallery extends Component {
 
   async onNewProps() {
     this.setState({
-      status: 'loading',
+      loading: true,
       images: [],
       page: 1,
     });
@@ -50,7 +51,6 @@ export class ImageGallery extends Component {
       this.setState({
         images: [...images, ...api.hits],
         totalHits: api.totalHits,
-        status: 'succes',
       });
       if (api.totalHits === 0) {
         toast.error('Sorry...no images found', { theme: 'colored' });
@@ -58,6 +58,10 @@ export class ImageGallery extends Component {
     } catch (error) {
       console.log(error);
       toast.error('Sorry...no images found', { theme: 'colored' });
+    } finally {
+      this.setState({
+        loading: false,
+      });
     }
   };
 
@@ -75,26 +79,24 @@ export class ImageGallery extends Component {
   }
 
   render() {
-    const { status, images, openModal, totalHits, largeImg, page, perPage } =
+    const { loading, images, openModal, totalHits, largeImg, page, perPage } =
       this.state;
     return (
       <>
-        {status === 'succes' && (
-          <ul className={css.gallery}>
-            {images?.map(image => (
-              <ImageGalleryItem
-                key={image.id}
-                imageURL={image.webformatURL}
-                imageAlt={image.tags}
-                largeURL={image.largeImageURL}
-                onClick={this.handleLargeImg}
-              />
-            ))}
-          </ul>
-        )}
-
-        {status === 'loading' && <Loader />}
-        {totalHits / page > perPage && (
+        (
+        <ul className={css.gallery}>
+          {images?.map(image => (
+            <ImageGalleryItem
+              key={image.id}
+              imageURL={image.webformatURL}
+              imageAlt={image.tags}
+              largeURL={image.largeImageURL}
+              onClick={this.handleLargeImg}
+            />
+          ))}
+        </ul>
+        ){loading && <Loader />}
+        {totalHits / page > perPage && !loading && (
           <Button onClick={this.handleClickButton} />
         )}
         {openModal && <Modal onClose={this.handleToggle} largeURL={largeImg} />}
