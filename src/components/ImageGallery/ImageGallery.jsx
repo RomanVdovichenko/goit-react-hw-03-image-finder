@@ -73,7 +73,6 @@ export class ImageGallery extends Component {
       await this.fatchData(titleImg);
     }
     if (prevState.page !== page && page !== 1) {
-      this.setState({ status: 'loading' });
       await this.fatchData(titleImg);
     }
   }
@@ -83,19 +82,21 @@ export class ImageGallery extends Component {
       this.state;
     return (
       <>
-        (
-        <ul className={css.gallery}>
-          {images?.map(image => (
-            <ImageGalleryItem
-              key={image.id}
-              imageURL={image.webformatURL}
-              imageAlt={image.tags}
-              largeURL={image.largeImageURL}
-              onClick={this.handleLargeImg}
-            />
-          ))}
-        </ul>
-        ){loading && <Loader />}
+        {loading && <Loader />}
+        {!loading && (
+          <ul className={css.gallery}>
+            {images?.map(image => (
+              <ImageGalleryItem
+                key={image.id}
+                imageURL={image.webformatURL}
+                imageAlt={image.tags}
+                largeURL={image.largeImageURL}
+                onClick={this.handleLargeImg}
+              />
+            ))}
+          </ul>
+        )}
+
         {totalHits / page > perPage && !loading && (
           <Button onClick={this.handleClickButton} />
         )}
