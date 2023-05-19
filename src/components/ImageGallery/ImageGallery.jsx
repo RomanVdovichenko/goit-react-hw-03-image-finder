@@ -68,7 +68,6 @@ export class ImageGallery extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    console.log('Update');
     const { titleImg } = this.props;
     const { page } = this.state;
     if (prevProps.titleImg !== titleImg) {
