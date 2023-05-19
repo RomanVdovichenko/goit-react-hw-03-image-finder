@@ -29,7 +29,6 @@ export class ImageGallery extends Component {
 
   async onNewProps() {
     this.setState({
-      loading: true,
       images: [],
       page: 1,
     });
@@ -44,6 +43,9 @@ export class ImageGallery extends Component {
   };
 
   fatchData = async titleImg => {
+    this.setState({
+      loading: true,
+    });
     try {
       const { page, perPage, images } = this.state;
       const api = await imagesApi(titleImg, page, perPage);
@@ -66,6 +68,7 @@ export class ImageGallery extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
+    console.log('Update');
     const { titleImg } = this.props;
     const { page } = this.state;
     if (prevProps.titleImg !== titleImg) {
@@ -82,21 +85,19 @@ export class ImageGallery extends Component {
       this.state;
     return (
       <>
+        <ul className={css.gallery}>
+          {images?.map(image => (
+            <ImageGalleryItem
+              key={image.id}
+              imageURL={image.webformatURL}
+              imageAlt={image.tags}
+              largeURL={image.largeImageURL}
+              onClick={this.handleLargeImg}
+              isLoading={this.state.loading}
+            />
+          ))}
+        </ul>
         {loading && <Loader />}
-        {!loading && (
-          <ul className={css.gallery}>
-            {images?.map(image => (
-              <ImageGalleryItem
-                key={image.id}
-                imageURL={image.webformatURL}
-                imageAlt={image.tags}
-                largeURL={image.largeImageURL}
-                onClick={this.handleLargeImg}
-              />
-            ))}
-          </ul>
-        )}
-
         {totalHits / page > perPage && !loading && (
           <Button onClick={this.handleClickButton} />
         )}

@@ -2,11 +2,25 @@ import React from 'react';
 import css from './ImageGalleryItem.module.css';
 import PropTypes from 'prop-types';
 
-export const ImageGalleryItem = ({ largeURL, imageURL, imageAlt, onClick }) => {
+export const ImageGalleryItem = ({
+  largeURL,
+  imageURL,
+  imageAlt,
+  onClick,
+  isLoading,
+}) => {
   return (
-    <li className={css.gallery_item} id={largeURL} onClick={onClick}>
-      <img className={css.gallery_item_image} src={imageURL} alt={imageAlt} />
-    </li>
+    <>
+      <li className={css.gallery_item} id={largeURL} onClick={onClick}>
+        {!isLoading && (
+          <img
+            className={css.gallery_item_image}
+            src={imageURL}
+            alt={imageAlt}
+          />
+        )}
+      </li>
+    </>
   );
 };
 

@@ -20,7 +20,7 @@ export class Searchbar extends Component {
       return;
     }
     this.props.onSubmit(this.state.titleImg);
-    this.setState({ titleImg: '' });
+    // this.setState({ titleImg: '' });
   };
 
   render() {
