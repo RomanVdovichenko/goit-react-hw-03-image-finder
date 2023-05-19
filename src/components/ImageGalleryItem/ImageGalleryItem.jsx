@@ -12,7 +12,7 @@ export const ImageGalleryItem = ({
   return (
     <>
       <li className={css.gallery_item} id={largeURL} onClick={onClick}>
-        {!isLoading && (
+        {isLoading === 'succes' && (
           <img
             className={css.gallery_item_image}
             src={imageURL}
@@ -29,4 +29,5 @@ ImageGalleryItem.propTypes = {
   imageAlt: PropTypes.string,
   largeURL: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+  isLoading: PropTypes.string.isRequired,
 };
