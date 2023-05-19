@@ -11,8 +11,6 @@ import { Modal } from '../Modal/Modal';
 export class ImageGallery extends Component {
   state = {
     images: [],
-    // loading: false,
-    openModal: false,
     largeImg: '',
     totalHits: 0,
     page: 1,
@@ -22,10 +20,10 @@ export class ImageGallery extends Component {
 
   handleLargeImg = event => {
     const img = event.currentTarget.id;
-    this.setState(prevState => ({
-      openModal: !prevState.openModal,
+    this.setState({
+      status: 'openModal',
       largeImg: img,
-    }));
+    });
   };
 
   async onNewProps() {
@@ -36,7 +34,7 @@ export class ImageGallery extends Component {
   }
 
   handleToggle = () => {
-    this.setState(prevState => ({ openModal: !prevState.openModal }));
+    this.setState({ status: 'succes' });
   };
 
   handleClickButton = () => {
@@ -45,7 +43,6 @@ export class ImageGallery extends Component {
 
   fatchData = async titleImg => {
     this.setState({
-      // loading: true,
       status: 'loading',
     });
     try {
@@ -79,19 +76,10 @@ export class ImageGallery extends Component {
   }
 
   render() {
-    const {
-      status,
-      // loading,
-      images,
-      openModal,
-      totalHits,
-      largeImg,
-      page,
-      perPage,
-    } = this.state;
+    const { status, images, totalHits, largeImg, page, perPage } = this.state;
     return (
       <>
-        <ul className={css.gallery}>
+        <ul className={status === 'succes' ? css.gallery : css.gallery_none}>
           {images?.map(image => (
             <ImageGalleryItem
               key={image.id}
@@ -99,15 +87,17 @@ export class ImageGallery extends Component {
               imageAlt={image.tags}
               largeURL={image.largeImageURL}
               onClick={this.handleLargeImg}
-              isLoading={status}
             />
           ))}
         </ul>
+
         {status === 'loading' && <Loader />}
         {totalHits / page > perPage && status === 'succes' && (
           <Button onClick={this.handleClickButton} />
         )}
-        {openModal && <Modal onClose={this.handleToggle} largeURL={largeImg} />}
+        {status === 'openModal' && (
+          <Modal onClose={this.handleToggle} largeURL={largeImg} />
+        )}
       </>
     );
   }

@@ -10,3 +10,7 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+.gallery_none {
+  opacity: 0;
+}
